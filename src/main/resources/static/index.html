@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>狹縫之間圖書館 · Situation Puzzle</title>
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="stylesheet" href="/css/style.css?v=20260819" />
+</head>
+<body>
+  <div id="min-size-mask" class="hidden">
+    <div class="mask-panel">
+      <h2>視窗過小</h2>
+      <p>請將瀏覽器調整為至少 <strong>960 × 540</strong></p>
+    </div>
+  </div>
+
+  <div id="scale-root">
+    <div id="game-shell">
+      <div id="game-bg" aria-hidden="true"></div>
+      <div id="ui-overlay">
+        <div id="hud-top">
+          <span id="hud-phase">—</span>
+          <span id="hud-score">本則 0</span>
+        </div>
+        <div id="npc-area">
+          <img id="npc-sprite" src="/assets/npc/npc-1.webp" alt="館長" draggable="false" />
+        </div>
+        <div id="options-panel" class="hidden"></div>
+        <button type="button" id="btn-ending" class="hidden">通往世界</button>
+        <div id="menu-panel" class="hidden"></div>
+        <div id="menu-panel-left" class="hidden"></div>
+        <div id="ending-panel" class="hidden" aria-label="故事與真實事件">
+          <div class="ending-panel-head">
+            <div class="ending-panel-title">故事與真實事件</div>
+            <div class="ending-panel-sub">改編說明 · 事件簡介 · 延伸連結</div>
+          </div>
+          <div id="ending-dossier"></div>
+        </div>
+        <div id="title-panel" class="hidden">
+          <div class="title-card">
+            <div class="logo">狹縫之間圖書館</div>
+            <div class="logo-sub">Situation Puzzle</div>
+            <div class="title-rule" aria-hidden="true"></div>
+            <p class="title-tagline">掉進圖書館的世界 · 走完四則故事，才能回家</p>
+            <button type="button" id="btn-start" class="btn primary title-start">進入遊戲</button>
+            <button type="button" id="btn-credits" class="btn title-credits">製作名單</button>
+          </div>
+        </div>
+        <div id="credits-panel" class="hidden" aria-label="製作與感謝名單">
+          <div class="credits-card">
+            <div class="credits-title">製作・感謝名單</div>
+            <div class="credits-rule" aria-hidden="true"></div>
+            <section class="credits-section">
+              <h3>製作名單</h3>
+              <div class="credit-row">
+                <span class="credit-role">人物繪製</span>
+                <span class="credit-name">Brad.Lin</span>
+              </div>
+              <div class="credit-row">
+                <span class="credit-role">程式開發</span>
+                <span class="credit-name">Cody.Fu</span>
+              </div>
+            </section>
+            <section class="credits-section">
+              <h3>感謝名單</h3>
+              <div class="credit-cat">背景相關素材</div>
+              <div class="credit-item">
+                <span class="credit-name">ネギ屋（細長いネギ）</span>
+                <a class="credit-link" href="https://booth.pm/zh-tw/items/3280495" target="_blank" rel="noopener">booth.pm 素材頁</a>
+              </div>
+              <div class="credit-item">
+                <span class="credit-name">Stream Atelier - AI素材工房 -</span>
+                <a class="credit-link" href="https://booth.pm/zh-tw/items/8494276" target="_blank" rel="noopener">booth.pm 素材頁</a>
+              </div>
+              <div class="credit-cat">AI 串接服務</div>
+              <div class="credit-item">
+                <span class="credit-name">OpenRouter</span>
+                <a class="credit-link" href="https://openrouter.ai/" target="_blank" rel="noopener">openrouter.ai</a>
+              </div>
+            </section>
+            <section class="credits-section">
+              <h3>技術與工具</h3>
+              <div class="credit-tech">
+                <span class="credit-tech-item">Spring Boot 3.4</span>
+                <span class="credit-tech-item">MySQL</span>
+                <span class="credit-tech-item">JavaScript</span>
+              </div>
+            </section>
+            <section class="credits-section">
+              <h3>原始碼</h3>
+              <div class="credit-item">
+                <a class="credit-link" href="https://github.com/SituationPuzzleGroup/SituationPuzzleProject" target="_blank" rel="noopener">GitHub Repository</a>
+              </div>
+            </section>
+            <button type="button" id="btn-credits-close" class="btn small credits-close">關閉</button>
+          </div>
+        </div>
+        <div id="origin-dialog" class="hidden" aria-label="故事真實事件">
+          <div class="origin-dialog-card">
+            <div class="origin-dialog-head">
+              <div>
+                <div class="origin-dialog-title" id="origin-dialog-title">故事 · 真實事件</div>
+                <div class="origin-dialog-sub">改編說明 · 事件簡介 · 延伸連結</div>
+              </div>
+              <button type="button" id="btn-origin-close" class="btn small">關閉</button>
+            </div>
+            <div class="origin-dialog-body" id="origin-dialog-body"></div>
+          </div>
+        </div>
+        <div id="cheat-dialog" class="hidden" aria-label="隱藏密碼框">
+          <div class="cheat-card">
+            <div class="cheat-title">？</div>
+            <div class="cheat-sub">圖書館的後門</div>
+            <input id="cheat-input" type="password" placeholder="輸入密語…" maxlength="32" autocomplete="off" />
+            <div id="cheat-msg" class="cheat-msg"></div>
+            <div class="cheat-actions">
+              <button type="button" id="btn-cheat-send" class="btn small">送出</button>
+              <button type="button" id="btn-cheat-close" class="btn small">關閉</button>
+            </div>
+          </div>
+        </div>
+        <div id="ending-scene" class="hidden" aria-hidden="true">
+          <video id="escene-video" src="/assets/video/end.webm" muted playsinline preload="auto"></video>
+        </div>
+        <div id="dialogue-box">
+          <div class="dialogue-header">
+            <div id="speaker-name">館長</div>
+          </div>
+          <div id="dialogue-text">載入中…</div>
+          <div id="continue-hint" class="hidden"></div>
+          <div id="click-tip" aria-hidden="true">▼</div>
+        </div>
+        <div id="loading-overlay" class="hidden" aria-live="polite" aria-busy="true">
+          <div class="loading-card">
+            <div class="spinner" aria-hidden="true"></div>
+            <div id="loading-text">伺服器處理中，請稍候…</div>
+            <div class="loading-sub">AI 回應可能需要幾秒</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 獨立於 scale，便於全視窗拖曳 -->
+  <aside id="helper-dock" title="拖曳移動位置">
+    <button type="button" id="helper-toggle" title="點一下開關面板；按住拖曳移動">📎</button>
+    <div id="helper-panel" class="hidden">
+      <div class="helper-head">
+        <span class="helper-drag-label">小迴紋 · 可拖曳</span>
+        <select id="hint-level" title="提示程度（不影響分數）">
+          <option value="OFF">不提示</option>
+          <option value="LOW" selected>輕提示</option>
+          <option value="MID">中提示</option>
+          <option value="HIGH">強提示</option>
+          <option value="SPOILER">直接劇透</option>
+        </select>
+      </div>
+      <div id="helper-log"></div>
+      <div class="helper-actions">
+        <button type="button" id="btn-hint" class="btn small">給點提示</button>
+      </div>
+      <div class="helper-input-row">
+        <input id="helper-input" type="text" placeholder="跟精靈說…（Enter 送出）" maxlength="200" />
+        <button type="button" id="btn-helper-send" class="btn small">送出</button>
+      </div>
+    </div>
+  </aside>
+
+  <script type="module" src="/js/main.js?v=20260819"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: situation-puzzle
+  datasource:
+    url: jdbc:mysql://localhost:3306/situation_puzzle?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Taipei&characterEncoding=utf8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL_USER:root}
+    # 密碼請用環境變數或本機 .env，勿提交版控
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        # 本機為 MariaDB 11.x；用 MariaDBDialect 避免 MySQLDialect 的 metadata 警告
+        dialect: org.hibernate.dialect.MariaDBDialect
+        format_sql: true
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+  jackson:
+    default-property-inclusion: non_null
+
+# 可選：改回記憶體庫 — spring.profiles.active=h2
+---
+spring:
+  config:
+    activate:
+      on-profile: h2
+  datasource:
+    url: jdbc:h2:mem:situation;DB_CLOSE_DELAY=-1;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  sql:
+    init:
+      mode: always
+
+---
+app:
+  cookie:
+    # 簽章/加密用 master secret；請用環境變數 GAME_COOKIE_SECRET（本機 .env，勿提交版控）
+    # 為空時啟動隨機產生（僅開發用，重啟即失效）
+    secret: ${GAME_COOKIE_SECRET:}
+    cookie-name: sp_core
+    max-age-sec: 7200
+  game:
+    max-rounds: 4
+    default-option-score: 20
+    normal-ending-score: 208
+    true-ending-score: 256
+    default-truth-threshold: 60
+  llm:
+    enabled: ${LLM_ENABLED:true}
+    base-url: https://openrouter.ai/api/v1
+    api-key: ${OPENROUTER_API_KEY:}
+    default-profile: openrouter-qwen
+    # Qwen3.7 Flash 預設會深度思考；關閉以加快首 token、省費用
+    enable-thinking: ${LLM_ENABLE_THINKING:false}
+    site-url: ${APP_PUBLIC_URL:http://localhost:8080}
+    site-name: SituationPuzzle
+    connect-timeout-ms: 10000
+    read-timeout-ms: 60000
+    profiles:
+      openrouter-qwen:
+        # 正式測試：Qwen3.7 Flash（中文對白／串流）
+        model: qwen/qwen3.7-flash
+        max-tokens: 512
+        temperature: 0.5
+      openrouter-free:
+        model: openrouter/free
+        max-tokens: 512
+        temperature: 0.5
+      openrouter-paid:
+        model: openai/gpt-4o-mini
+        max-tokens: 1024
+        temperature: 0.4
+  helper:
+    default-hint-level: LOW
+
+logging:
+  level:
+    com.situationpuzzle: INFO
+    org.hibernate.SQL: WARN

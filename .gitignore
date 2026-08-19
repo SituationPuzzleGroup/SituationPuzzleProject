@@ -1,0 +1,33 @@
+# --- 建置產物 ---
+target/
+*.class
+*.jar.original
+
+# --- 機密（切勿提交） ---
+.env
+
+# --- 開發對話紀錄（含 API key 等敏感內容，勿上版控） ---
+session.txt
+*-session.txt
+*session*.txt
+
+# --- 日誌 ---
+*.log
+
+# --- IDE ---
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+*.swp
+
+# --- 作業系統 ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- 暫存 ---
+*.tmp
+~$*
