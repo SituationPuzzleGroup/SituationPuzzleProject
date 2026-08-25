@@ -100,5 +100,7 @@ src/main/resources/
 - **背景素材**：[ネギ屋（細長いネギ）](https://booth.pm/zh-tw/items/3280495)、[Stream Atelier - AI素材工房 -](https://booth.pm/zh-tw/items/8494276)
 - **音樂**：[PeriTune](https://peritune.booth.pm/) — [Forgotten Past](https://booth.pm/zh-tw/items/4911242)、[Silent Witness](https://booth.pm/zh-tw/items/5740420)、[Wacky Witnes](https://booth.pm/zh-tw/items/6532506)、[Spooky Night](https://peritune.booth.pm/items/2715397)、[Coppelia_Room](https://peritune.booth.pm/items/4553746)、[Forest Sage](https://booth.pm/zh-tw/items/4913874)
 - **AI 串接**：[OpenRouter](https://openrouter.ai/)
+- **AI 輔助開發**：Claude-Code（GLM-5.1）
+- **AI 動畫製作**：Grok
 
 遊戲內標題頁「製作名單」亦有完整清單。
