@@ -4,10 +4,13 @@
 
 每則故事都以**倒敘**呈現：館長先說出故事的「結果」，玩家透過四次提問拼湊「原因」。而這些故事，全都改編自**真實發生過的事件**。
 
+🎮 線上試玩：<https://situationpuzzle.mypc.tw/>
+
 ## 特色
 
-- 🕯️ **倒敘式真實事件改編**：四則灰暗故事（孟喬森母女、盜屍之愛、完美女兒的謊言……），通關後可逐則解鎖「聆聽故事起源」，查看對應的真實案件介紹與延伸連結
+- 🕯️ **倒敘式真實事件改編**：四則灰暗故事（孟喬森母女、盜屍之愛、完美女兒的謊言、座間九人殺害事件），通關後可逐則解鎖「聆聽故事起源」，查看對應的真實案件介紹與延伸連結
 - 🤖 **雙 AI 角色**（[OpenRouter](https://openrouter.ai/)）：館長 NPC 依故事脈絡與真相卡演繹回覆（非複誦腳本）；迴紋針精靈是玩家助理，五段提示等級（OFF～SPOILER），具備畫面導覽能力
+- 🎵 **背景音樂**（[PeriTune](https://peritune.booth.pm/) 素材）：大廳與各則故事專屬配樂、無縫循環、右下角一鍵靜音；開場進度條預載全部曲目，遊玩中切曲零卡頓；結局動畫內建 Forest Sage 配樂（結尾漸淡）
 - 🎬 **通關動畫**：完成四則故事後，中央浮現「通往世界」按鈕——按下後播放開門動畫，回到現實世界
 - ✨ **演出細節**：NPC 百葉窗式登場、打字機字幕（40ms/字，可調）、說話動畫（動態 WebP 眨眼／張嘴循環）
 - 📜 **無狀態後端**：遊戲進度以簽章加密 Cookie 攜帶，伺服器不存 session
@@ -84,15 +87,18 @@ src/main/resources/
 
 ## 開發狀態
 
-- [x] 故事一～三（含真實案件檔案）
-- [ ] 故事四（規劃中）
+- [x] 故事一～四定稿（含真實案件檔案）
 - [x] 結局動畫、逐則真實事件解鎖、雙 AI、無狀態進度
+- [x] 背景音樂系統（大廳／各則故事配樂、靜音切換、開場預載）
 
 ## 製作與感謝
 
-- **人物繪製**：Brad.Lin
-- **程式開發**：Cody.Fu
+- **劇本**：林青乖（Brad.Lin）
+- **人物繪製**：林青乖（Brad.Lin）
+- **UI 設計**：傅遠佳（Cody.Fu）
+- **程式開發**：傅遠佳（Cody.Fu）
 - **背景素材**：[ネギ屋（細長いネギ）](https://booth.pm/zh-tw/items/3280495)、[Stream Atelier - AI素材工房 -](https://booth.pm/zh-tw/items/8494276)
+- **音樂**：[PeriTune](https://peritune.booth.pm/) — [Forgotten Past](https://booth.pm/zh-tw/items/4911242)、[Silent Witness](https://booth.pm/zh-tw/items/5740420)、[Wacky Witnes](https://booth.pm/zh-tw/items/6532506)、[Spooky Night](https://peritune.booth.pm/items/2715397)、[Coppelia_Room](https://peritune.booth.pm/items/4553746)、[Forest Sage](https://booth.pm/zh-tw/items/4913874)
 - **AI 串接**：[OpenRouter](https://openrouter.ai/)
 
 遊戲內標題頁「製作名單」亦有完整清單。
