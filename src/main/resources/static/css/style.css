@@ -1287,3 +1287,81 @@ body {
   opacity: 0.85;
   pointer-events: none;
 }
+
+/* BGM 喇叭鈕：與精靈鈕同一排 dock（右下角） */
+.dock-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+#btn-bgm-toggle {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,215,140,0.5);
+  background: rgba(20,20,30,0.9);
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  transition: filter 0.15s ease;
+}
+#btn-bgm-toggle:hover {
+  filter: brightness(1.25);
+}
+#btn-bgm-toggle.is-muted {
+  filter: grayscale(0.6) brightness(0.8);
+  border-color: rgba(255,255,255,0.25);
+}
+
+/* BGM 預載層：全螢幕、獨立於 scale-root（同 min-size-mask 層級作法） */
+#preload-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(6, 6, 12, 0.96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#preload-overlay.hidden {
+  display: none !important;
+}
+.preload-card {
+  width: min(420px, 84vw);
+  padding: 28px 32px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 215, 140, 0.45);
+  background: rgba(16, 16, 28, 0.95);
+  text-align: center;
+}
+.preload-title {
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: #ffe6b0;
+  margin-bottom: 18px;
+}
+.preload-bar {
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+#preload-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #b8860b, #ffd78c);
+  transition: width 0.25s ease;
+}
+#preload-text {
+  font-size: 14px;
+  color: #e8dcc0;
+  margin-bottom: 6px;
+  word-break: break-all;
+}
+.preload-sub {
+  font-size: 12px;
+  color: #9a9285;
+}

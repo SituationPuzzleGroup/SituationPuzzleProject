@@ -15,6 +15,16 @@
     </div>
   </div>
 
+  <!-- BGM 預載層：點「進入遊戲」後全螢幕下載音樂，完成才開始 -->
+  <div id="preload-overlay" class="hidden" aria-live="polite">
+    <div class="preload-card">
+      <div class="preload-title">圖書館正在甦醒…</div>
+      <div class="preload-bar" aria-hidden="true"><div id="preload-fill"></div></div>
+      <div id="preload-text">準備音樂中…</div>
+      <div class="preload-sub">首次載入約需數十秒，之後會快取</div>
+    </div>
+  </div>
+
   <div id="scale-root">
     <div id="game-shell">
       <div id="game-bg" aria-hidden="true"></div>
@@ -54,12 +64,20 @@
             <section class="credits-section">
               <h3>製作名單</h3>
               <div class="credit-row">
+                <span class="credit-role">劇本</span>
+                <span class="credit-name">林青乖（Brad.Lin）</span>
+              </div>
+              <div class="credit-row">
                 <span class="credit-role">人物繪製</span>
-                <span class="credit-name">Brad.Lin</span>
+                <span class="credit-name">林青乖（Brad.Lin）</span>
+              </div>
+              <div class="credit-row">
+                <span class="credit-role">UI 設計</span>
+                <span class="credit-name">傅遠佳（Cody.Fu）</span>
               </div>
               <div class="credit-row">
                 <span class="credit-role">程式開發</span>
-                <span class="credit-name">Cody.Fu</span>
+                <span class="credit-name">傅遠佳（Cody.Fu）</span>
               </div>
             </section>
             <section class="credits-section">
@@ -72,6 +90,31 @@
               <div class="credit-item">
                 <span class="credit-name">Stream Atelier - AI素材工房 -</span>
                 <a class="credit-link" href="https://booth.pm/zh-tw/items/8494276" target="_blank" rel="noopener">booth.pm 素材頁</a>
+              </div>
+              <div class="credit-cat">音樂</div>
+              <div class="credit-item">
+                <span class="credit-name">PeriTune —「Forgotten Past」</span>
+                <a class="credit-link" href="https://booth.pm/zh-tw/items/4911242" target="_blank" rel="noopener">booth.pm 素材頁</a>
+              </div>
+              <div class="credit-item">
+                <span class="credit-name">PeriTune —「Silent Witness」</span>
+                <a class="credit-link" href="https://booth.pm/zh-tw/items/5740420" target="_blank" rel="noopener">booth.pm 素材頁</a>
+              </div>
+              <div class="credit-item">
+                <span class="credit-name">PeriTune —「Wacky Witnes」</span>
+                <a class="credit-link" href="https://booth.pm/zh-tw/items/6532506" target="_blank" rel="noopener">booth.pm 素材頁</a>
+              </div>
+              <div class="credit-item">
+                <span class="credit-name">PeriTune —「Spooky Night」</span>
+                <a class="credit-link" href="https://peritune.booth.pm/items/2715397" target="_blank" rel="noopener">peritune.booth.pm</a>
+              </div>
+              <div class="credit-item">
+                <span class="credit-name">PeriTune —「Coppelia_Room」</span>
+                <a class="credit-link" href="https://peritune.booth.pm/items/4553746" target="_blank" rel="noopener">peritune.booth.pm</a>
+              </div>
+              <div class="credit-item">
+                <span class="credit-name">PeriTune —「Forest Sage」</span>
+                <a class="credit-link" href="https://booth.pm/zh-tw/items/4913874" target="_blank" rel="noopener">booth.pm 素材頁</a>
               </div>
               <div class="credit-cat">AI 串接服務</div>
               <div class="credit-item">
@@ -121,7 +164,7 @@
           </div>
         </div>
         <div id="ending-scene" class="hidden" aria-hidden="true">
-          <video id="escene-video" src="/assets/video/end.webm" muted playsinline preload="auto"></video>
+          <video id="escene-video" src="/assets/video/end.webm" playsinline preload="auto"></video>
         </div>
         <div id="dialogue-box">
           <div class="dialogue-header">
@@ -144,6 +187,9 @@
 
   <!-- 獨立於 scale，便於全視窗拖曳 -->
   <aside id="helper-dock" title="拖曳移動位置">
+    <div class="dock-buttons">
+      <button type="button" id="btn-bgm-toggle" title="切換音樂播放／靜音" aria-label="切換音樂播放或靜音">🔊</button>
+    </div>
     <button type="button" id="helper-toggle" title="點一下開關面板；按住拖曳移動">📎</button>
     <div id="helper-panel" class="hidden">
       <div class="helper-head">

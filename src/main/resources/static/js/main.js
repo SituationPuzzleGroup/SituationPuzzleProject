@@ -1,5 +1,6 @@
 import { api } from './api/client.js';
 import { readDisplay } from './api/stateStore.js';
+import { bgm } from './audio/bgm.js';
 import { initScale } from './rwd/scale.js';
 import { initHelperDrag } from './ui/helperDrag.js';
 
@@ -348,6 +349,12 @@ function applyState(data, { preserveDialogue = false } = {}) {
   const prevPhase = state?.phase;
   state = data;
   els.phase.textContent = data.phase || '—';
+  // 背景音樂：標題不播；遊戲中依階段＋故事編號切曲（同曲不重播）
+  if (data.phase === 'TITLE' || data.phase === 'FINISHED') {
+    bgm.stop();
+  } else {
+    bgm.play(bgm.forPhase(data.phase, data.currentStoryOrder));
+  }
   // 計分以「本則」為主；加總僅輔助顯示
   if (data.currentRound) {
     const thr = data.ui?.truthThreshold != null ? data.ui.truthThreshold : 60;
@@ -655,6 +662,24 @@ function appendHelperLine(who, text, { streamingLine = false, lineEl = null } = 
   return line;
 }
 
+/** BGM 預載：顯示進度條下載全部曲目（已載過則瞬間完成） */
+function runBgmPreload() {
+  const overlay = $('preload-overlay');
+  const fill = $('preload-fill');
+  const text = $('preload-text');
+  if (!overlay || !fill || !text) return Promise.resolve();
+  overlay.classList.remove('hidden');
+  return bgm.preloadAll((loaded, total, name) => {
+    fill.style.width = `${Math.round((loaded / total) * 100)}%`;
+    text.textContent = `下載音樂 ${loaded}/${total}：${name}`;
+  }).finally(() => {
+    // 收尾：補滿進度條，短暫停留後淡出
+    fill.style.width = '100%';
+    text.textContent = '準備完成';
+    setTimeout(() => overlay.classList.add('hidden'), 350);
+  });
+}
+
 async function act(fn, busyMessage) {
   if (busy) {
     if (!streaming) setBusy(true, '仍在等待伺服器回應，請稍候…');
@@ -927,6 +952,10 @@ async function playEndingAnimation() {
   if (btnEnding) btnEnding.classList.add('hidden');
   scene.classList.remove('hidden');
 
+  // 影片自帶結局配樂（Forest_Sage）：播放時暫停 BGM，結束後恢復
+  bgm.stop();
+  video.muted = false;
+
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   try {
     video.currentTime = 0;
@@ -954,6 +983,7 @@ async function playEndingAnimation() {
   await wait(1000);
   scene.classList.add('hidden');
   els.dialogueBox.classList.remove('hidden');
+  video.muted = true;                    // 收回影片音軌，避免重播殘響
 }
 
 async function boot() {
@@ -963,7 +993,31 @@ async function boot() {
   const pre = new Image();
   pre.src = NPC_TALK_SRC;
 
-  bindButton($('btn-start'), () => act(() => api.start(true), '開始遊戲…'));
+  // BGM：瀏覽器自動播放政策下首次 play() 可能被擋，
+  // 任一點擊／按鍵都是重試時機（含「進入遊戲」本身）
+  document.addEventListener('click', () => bgm.onUserGesture(), { capture: true });
+  document.addEventListener('keydown', () => bgm.onUserGesture(), { capture: true });
+
+  // 右下角喇叭鈕：切換音樂播放／靜音
+  const bgmBtn = $('btn-bgm-toggle');
+  if (bgmBtn) {
+    const paintBgmBtn = (muted) => {
+      bgmBtn.textContent = muted ? '🔇' : '🔊';
+      bgmBtn.classList.toggle('is-muted', muted);
+    };
+    paintBgmBtn(false);
+    bgmBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      paintBgmBtn(bgm.toggleMute());
+    });
+  }
+
+  // 「進入遊戲」：先全螢幕預載 BGM（進度條），完成後才開始遊戲
+  bindButton($('btn-start'), () => act(async () => {
+    await runBgmPreload();
+    return api.start(true);
+  }, '開始遊戲…'));
   els.dialogueBox.addEventListener('click', onDialogueClick);
 
   // 製作・感謝名單：純前端覆蓋層，點背景或按 Esc 關閉

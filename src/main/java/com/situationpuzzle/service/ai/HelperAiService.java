@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class HelperAiService {
     private static final String HELPER_SYSTEM_FALLBACK = """
-            你是《狹縫之間圖書館》遊戲右側的玩家助理精靈（像早期 Office 迴紋針），站在玩家一邊。必須使用繁體中文、短句、口語。
+            你是《狹縫之間圖書館》遊戲右側的玩家助理精靈（像早期 Office 迴紋針），站在玩家一邊。必須使用繁體中文，口吻親切口語，認真完整地回答玩家；回覆長度 15～50 字。
             你可以給提示；依 hint_level 決定洩漏程度。不要假裝自己是館長 NPC。
             你的提示不影響分數。
             """;
@@ -92,11 +92,11 @@ public class HelperAiService {
     }
 
     public String oneShotHint(GameState state, HintLevel levelOverride) {
-        return chat(state, "請依目前進度給我一則簡短提示（繁體中文）。", levelOverride);
+        return chat(state, "請依目前進度給我一則提示（繁體中文）。", levelOverride);
     }
 
     public StreamResult streamHint(GameState state, HintLevel levelOverride, Consumer<String> onToken) {
-        return streamChat(state, "請依目前進度給我一則簡短提示（繁體中文）。", levelOverride, onToken);
+        return streamChat(state, "請依目前進度給我一則提示（繁體中文）。", levelOverride, onToken);
     }
 
     public StreamResult streamChat(
@@ -136,7 +136,7 @@ public class HelperAiService {
                 %sremaining_hint_tags=%s
                 correct_directions_if_allowed=%s
                 玩家說：%s
-                請用繁體中文簡短回答。
+                請用繁體中文回答，長度 15～50 字。
                 """.formatted(
                 level.name(),
                 state.getPhase(),
